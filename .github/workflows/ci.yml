@@ -27,8 +27,10 @@ jobs:
         GITHUB_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
         GITHUB_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       run: |
+        ls -al
         chmod 777 -R ./ci
         ./ci/build.sh
+
     - name: Update manifest
       env:
         PERSONAL_ACCESS_TOKEN: ${{ secrets.GITOPS_PASSWORD }}
