@@ -27,7 +27,7 @@ jobs:
         GITHUB_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
         GITHUB_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
       run: |
-        ls -al
+        ls -al ./ci
         chmod 777 -R ./ci
         ./ci/build.sh
 
