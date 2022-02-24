@@ -8,6 +8,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { Cosmos } from "@cosmostation/cosmosjs";
 import message from "@cosmostation/cosmosjs/src/messages/proto.js";
+import NodeCache from "node-cache";
+
+const cache = new NodeCache({ stdTTL: 24*60*60});
 
 let rawdata = fs.readFileSync('config.json');
 let config = JSON.parse(rawdata);
@@ -29,6 +32,22 @@ const app = express()
 app.use(bodyParser.urlencoded({ extended: false }));
 
 function sendTx(addressTo,res) {
+
+	let numberGetFaucet = cache.get(addressTo);
+	if (numberGetFaucet) {
+		if (numberGetFaucet >= 10){
+			console.log("Limit reached");
+			return res.send({"response":"You have reached the limit of 10 transactions per day"});
+		}	
+		else{
+			numberGetFaucet += 1;
+			cache.set(addressTo, numberGetFaucet);
+		}
+	} else {
+		numberGetFaucet = 1;
+		cache.set(addressTo, numberGetFaucet);
+	}
+
 	cosmos.getAccounts(address).then(data => {
 		// signDoc = (1)txBody + (2)authInfo
 		// ---------------------------------- (1)txBody ----------------------------------
