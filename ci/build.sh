@@ -1,4 +1,3 @@
-#!/bin/sh
 set -xe
 
 #Login to registry
